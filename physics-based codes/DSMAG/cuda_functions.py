@@ -384,9 +384,27 @@ __global__ void m_kernel(cufftDoubleComplex *a, cufftDoubleComplex *b, cufftDoub
 
 __global__ void division_kernel(double *a, cufftDoubleComplex *b, cufftDoubleComplex *c)
 {  
-    unsigned int i = threadIdx.x + blockIdx.x*blockDim.x;
-    unsigned int j = blockIdx.y;
-    a[i*NX+j] = b[i*NX+j].x/c[i*NX+j].x;   
+    //unsigned int i = threadIdx.x + blockIdx.x*blockDim.x;
+    //unsigned int j = blockIdx.y;
+    //a[i*NX+j] = b[i*NX+j].x/c[i*NX+j].x;   
+
+    double bb;
+    double cc;
+
+    for (int i = 0; i < NX; i++)
+    {
+        for (int j = 0; j < NX; j++){
+            bb +=  b[i*NX+j].x;
+            cc +=  c[i*NX+j].x;
+        }
+    }   
+    
+    for (int i = 0; i < NX; i++)
+    {
+        for (int j = 0; j < NX; j++){
+            a[i*NX+j] =  bb/cc;
+        }
+    }
     
 }
 
